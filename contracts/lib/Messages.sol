@@ -79,6 +79,23 @@ library Message {
             abi.encodePacked(uint8(Types.Execute), _owner, _targets, _calldata);
     }
 
+    /**
+     * @notice Given the information needed for a message Type.Create
+     * (in this example case, the information is just a single number)
+     * format a bytes message encoding the information
+     * @param _owner The address of the owner for the wallet being created
+     * @param _updateCall The call data to update recipient contract
+     * @return The encoded bytes message
+     */
+    function formatTypeUpdate(
+        bytes32 _owner,
+        bytes32[] memory _targets,
+        bytes[] memory _calldata
+    ) internal pure returns (bytes memory) {
+        return
+            abi.encodePacked(uint8(Types.Execute), _owner, _targets, _calldata);
+    }
+
     // ============ Identifiers ============
 
     /**
