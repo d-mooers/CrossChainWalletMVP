@@ -38,21 +38,45 @@ library Message {
     using TypedMemView for bytes29;
 
     enum Types {
-        Invalid, // 0
-        A // 1 - a message which contains a single number
+        Invalid,
+        Create, // Create a new wallet on this chain
+        Execute, // Execute a transaction
+        Update // Update state of recipient wallet
     }
 
     // ============ Formatters ============
 
     /**
-     * @notice Given the information needed for a message TypeA
+     * @notice Given the information needed for a message Type.Create
      * (in this example case, the information is just a single number)
      * format a bytes message encoding the information
-     * @param _number The number to be included in the TypeA message
+     * @param _owner The address of the owner for the wallet being created
      * @return The encoded bytes message
      */
-    function formatTypeA(uint256 _number) internal pure returns (bytes memory) {
-        return abi.encodePacked(uint8(Types.A), _number);
+    function formatTypeCreate(bytes32 _owner)
+        internal
+        pure
+        returns (bytes memory)
+    {
+        return abi.encodePacked(uint8(Types.Create), _owner);
+    }
+
+    /**
+     * @notice Given the information needed for a message Type.Create
+     * (in this example case, the information is just a single number)
+     * format a bytes message encoding the information
+     * @param _owner The address of the owner for the wallet being created
+     * @param _targets The target addresses for each execution call
+     * @param _calldata The data for each execution
+     * @return The encoded bytes message
+     */
+    function formatTypeExecute(
+        bytes32 _owner,
+        bytes32[] memory _targets,
+        bytes[] memory _calldata
+    ) internal pure returns (bytes memory) {
+        return
+            abi.encodePacked(uint8(Types.Execute), _owner, _targets, _calldata);
     }
 
     // ============ Identifiers ============
